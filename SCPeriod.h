@@ -1,14 +1,14 @@
-#if !defined(__SCPERIOD_H__)
-#define __SCPERIOD_H__
+#ifndef SCPeriod_h
+#define SCPeriod_h
 
 #include <Arduino.h>
 
-class Period {
+class SCPeriod {
 public:
   typedef void (*dlgOnPeriodExpired)(void* instance);
 public:
-  Period(void* instance, uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired);
-  virtual ~Period();
+  SCPeriod(void* instance, uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired);
+  virtual ~SCPeriod();
   void Check();
   void Start();
   bool GetAutoRestart();
@@ -24,4 +24,4 @@ private:
   bool mStartPeriodMeasuringIsSet;
 };
 
-#endif  // !defined(__SCPERIOD_H__)
+#endif  //SCPeriod_h
