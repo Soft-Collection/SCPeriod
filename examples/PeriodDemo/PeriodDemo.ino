@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <Period.h>
+#include <SCPeriod.h>
 
 static void on_period100MS_auto_restart(void* instance);
 static void on_period10000MS_on_demand(void* instance);
@@ -17,6 +17,7 @@ void setup() {
   period10000MS_on_demand.Start();
 }
 void loop() {
+  //MUST CALL THIS FUNCTIONS IN THE LOOP.
   period100MS_auto_restart.Check();
   period10000MS_on_demand.Check();
 }

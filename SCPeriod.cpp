@@ -1,4 +1,4 @@
-#include "Period.h"
+#include "SCPeriod.h"
 
 #define TIME_NOT_SET -1
 

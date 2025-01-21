@@ -1,5 +1,5 @@
-#if !defined(__PERIOD_H__)
-#define __PERIOD_H__
+#if !defined(__SCPERIOD_H__)
+#define __SCPERIOD_H__
 
 #include <Arduino.h>
 
@@ -24,4 +24,4 @@ private:
   bool mStartPeriodMeasuringIsSet;
 };
 
-#endif  // !defined(__PERIOD_H__)
+#endif  // !defined(__SCPERIOD_H__)
