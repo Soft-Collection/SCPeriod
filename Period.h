@@ -7,23 +7,21 @@ class Period {
 public:
   typedef void (*dlgOnPeriodExpired)(void* instance);
 public:
-  Period(void* instance, uint32_t periodInTicks, boolean autoReset, dlgOnPeriodExpired onPeriodExpired);
+  Period(void* instance, uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired);
   virtual ~Period();
-  void Check(uint32_t ticks);
-  void Reset();
-  boolean PeriodExpired(uint32_t ticks);
-  boolean GetAutoReset();
-  void SetPeriodInTicks(uint32_t periodInTicks);
+  void Check();
+  void Start();
+  bool GetAutoRestart();
+  void SetPeriodInMS(uint32_t periodInMS);
 private:
-  uint32_t mPeriodInTicks;
-  boolean mAutoReset;
+  uint32_t mPeriodInMS;
+  bool mAutoRestart;
   //-----------------------------------
   void* mInstance;
   dlgOnPeriodExpired mOnPeriodExpired;
   //-----------------------------------
-  uint32_t mLastTicks;
-  boolean mOnPeriodExpiredMayRun;
-  boolean mMustPerformReset;
+  uint32_t mStartPeriodMeasuringInMS;
+  bool mStartPeriodMeasuringIsSet;
 };
 
 #endif  // !defined(__PERIOD_H__)

@@ -1,46 +1,35 @@
 #include "Period.h"
-#include "CommonFunctions.h"
 
-Period::Period(void* instance, uint32_t periodInTicks, boolean autoReset, dlgOnPeriodExpired onPeriodExpired) {
-  mPeriodInTicks = periodInTicks;
-  mAutoReset = autoReset;
+#define TIME_NOT_SET -1
+
+Period::Period(void* instance, uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired) {
+  mPeriodInMS = periodInMS;
+  mAutoRestart = autoRestart;
   //--------------------------------------------
   mInstance = instance;
   mOnPeriodExpired = onPeriodExpired;
   //--------------------------------------------
-  mLastTicks = TIME_NOT_SET;
-  mOnPeriodExpiredMayRun = true;
-  mMustPerformReset = false;
+  mStartPeriodMeasuringInMS = (mAutoRestart) ? millis() : TIME_NOT_SET;
+  mStartPeriodMeasuringIsSet = mAutoRestart;
 }
 Period::~Period() {
 }
-void Period::Reset() {
-  mMustPerformReset = true;
-}
-boolean Period::PeriodExpired(uint32_t ticks) {
-  return ((minus_time(ticks, mLastTicks) > mPeriodInTicks) && (mLastTicks > 0));
-}
-void Period::Check(uint32_t ticks) {
-  if (mMustPerformReset) {
-    mLastTicks = ticks;
-    mOnPeriodExpiredMayRun = true;
-    mMustPerformReset = false;
-  }
-  if (PeriodExpired(ticks)) {
-    if (mOnPeriodExpiredMayRun) {
-      mOnPeriodExpiredMayRun = false;
-      if (mOnPeriodExpired != 0) mOnPeriodExpired(mInstance);
-    }
-    //---------------------------------
-    if (mAutoReset) {
-      mLastTicks = ticks;
-      mOnPeriodExpiredMayRun = true;
-    }
+void Period::Check() {
+  uint32_t ms = millis();
+  if ((ms - mStartPeriodMeasuringInMS > mPeriodInMS) && (mStartPeriodMeasuringIsSet)) {
+    mStartPeriodMeasuringInMS = (mAutoRestart) ? ms : TIME_NOT_SET;
+    mStartPeriodMeasuringIsSet = mAutoRestart;
+    if (mOnPeriodExpired) mOnPeriodExpired(mInstance);
   }
 }
-boolean Period::GetAutoReset() {
-  return (mAutoReset);
+void Period::Start() {
+  if (mAutoRestart) return;
+  mStartPeriodMeasuringInMS = millis();
+  mStartPeriodMeasuringIsSet = true;
 }
-void Period::SetPeriodInTicks(uint32_t periodInTicks) {
-  mPeriodInTicks = periodInTicks;
+bool Period::GetAutoRestart() {
+  return (mAutoRestart);
+}
+void Period::SetPeriodInMS(uint32_t periodInMS) {
+  mPeriodInMS = periodInMS;
 }

@@ -1,21 +1,32 @@
 #include <Arduino.h>
 #include <Period.h>
 
-static void on_period100(void* instance);
+static void on_period100MS_auto_restart(void* instance);
+static void on_period10000MS_on_demand(void* instance);
 
 //Parameters are:
 //1. Calling instance
 //2. Period
 //3. Periodic = true, On demand = false
 //4. Callback function.
-Period period100(NULL, 100, true, on_period100);
+Period period100MS_auto_restart(NULL, 100, true, on_period100MS_auto_restart);
+Period period10000MS_on_demand(NULL, 10000, false, on_period10000MS_on_demand);
 
 void setup() {
   Serial.begin(115200);
+  period10000MS_on_demand.Start();
 }
 void loop() {
-  period100.Check(millis());
+  period100MS_auto_restart.Check();
+  period10000MS_on_demand.Check();
 }
-void on_period100(void* instance) {
-  Serial.println(millis());
+void on_period100MS_auto_restart(void* instance) {
+  Serial.print("Auto ");
+  Serial.print(millis());
+  Serial.println();
+}
+void on_period10000MS_on_demand(void* instance) {
+  Serial.print("On demand ");
+  Serial.print(millis());
+  Serial.println();
 }
