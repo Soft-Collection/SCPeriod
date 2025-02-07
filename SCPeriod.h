@@ -5,9 +5,9 @@
 
 class SCPeriod {
 public:
-  typedef void (*dlgOnPeriodExpired)(void* instance);
+  typedef void (*dlgOnPeriodExpired)();
 public:
-  SCPeriod(void* instance, uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired);
+  SCPeriod(uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired);
   virtual ~SCPeriod();
   void Check();
   void Start();
@@ -16,10 +16,7 @@ public:
 private:
   uint32_t mPeriodInMS;
   bool mAutoRestart;
-  //-----------------------------------
-  void* mInstance;
   dlgOnPeriodExpired mOnPeriodExpired;
-  //-----------------------------------
   uint32_t mStartPeriodMeasuringInMS;
   bool mStartPeriodMeasuringIsSet;
 };

@@ -2,13 +2,10 @@
 
 #define TIME_NOT_SET -1
 
-SCPeriod::SCPeriod(void* instance, uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired) {
+SCPeriod::SCPeriod(uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired) {
   mPeriodInMS = periodInMS;
   mAutoRestart = autoRestart;
-  //--------------------------------------------
-  mInstance = instance;
   mOnPeriodExpired = onPeriodExpired;
-  //--------------------------------------------
   mStartPeriodMeasuringInMS = (mAutoRestart) ? millis() : TIME_NOT_SET;
   mStartPeriodMeasuringIsSet = mAutoRestart;
 }
@@ -19,7 +16,7 @@ void SCPeriod::Check() {
   if ((ms - mStartPeriodMeasuringInMS > mPeriodInMS) && (mStartPeriodMeasuringIsSet)) {
     mStartPeriodMeasuringInMS = (mAutoRestart) ? ms : TIME_NOT_SET;
     mStartPeriodMeasuringIsSet = mAutoRestart;
-    if (mOnPeriodExpired) mOnPeriodExpired(mInstance);
+    if (mOnPeriodExpired) mOnPeriodExpired();
   }
 }
 void SCPeriod::Start() {
