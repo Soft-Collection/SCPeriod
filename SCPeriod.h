@@ -3,11 +3,16 @@
 
 #include <Arduino.h>
 
+class SCPeriodCallbacks {
+public:
+  SCPeriodCallbacks(){}
+  virtual ~SCPeriodCallbacks(){}
+  virtual void OnPeriodExpired(){}
+};
+
 class SCPeriod {
 public:
-  typedef void (*dlgOnPeriodExpired)(void* instance);
-public:
-  SCPeriod(void* instance, uint32_t periodInMS, bool autoRestart, dlgOnPeriodExpired onPeriodExpired);
+  SCPeriod(uint32_t periodInMS, bool autoRestart, SCPeriodCallbacks* callbacks);
   virtual ~SCPeriod();
   void Check();
   void Start();
@@ -16,10 +21,7 @@ public:
 private:
   uint32_t mPeriodInMS;
   bool mAutoRestart;
-  //-----------------------------------
-  void* mInstance;
-  dlgOnPeriodExpired mOnPeriodExpired;
-  //-----------------------------------
+  SCPeriodCallbacks* mCallbacks;
   uint32_t mStartPeriodMeasuringInMS;
   bool mStartPeriodMeasuringIsSet;
 };
